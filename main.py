@@ -2,6 +2,7 @@
 import random
 import pyglet
 from pyglet.gl import *
+import pyglet.window.key as key
 import shape
 
 class GameData:
@@ -9,18 +10,39 @@ class GameData:
     RUNNING = 1
     PAUSED = 2
     def __init__(self):
-        self.status = GameData.GAME_OVER
-        self.speed = 1.
-        self.meters = 0
-        self.secs = 0.
+        self.reset()
 
     def update(self, dt):
         self.secs += dt*self.speed
-        if self.secs == 1.0:
+        if self.secs > 1.0:
             self.secs = 0.0
             self.speed += 0.1
-            self.meters = 1.
+            self.meters += 1.
 
+    def is_running(self):
+        return self.status == GameData.RUNNING
+
+    def is_paused(self):
+        return self.status == GameData.PAUSED
+
+    def is_over(self):
+        return self.status == GameData.GAME_OVER
+
+    def set_running(self):
+        self.status = GameData.RUNNING
+
+    def set_paused(self):
+        self.status = GameData.PAUSED
+
+    def set_over(self):
+        self.status = GameData.GAME_OVER
+
+    def reset(self):
+        self.speed = 1.
+        self.meters = 0
+        self.secs = 0.
+        self.set_over()
+    
 def main():
     WIDTH = 800
     HEIGHT = 600
@@ -43,7 +65,10 @@ def main():
 
     game_data = GameData()
 
+    game_data.set_running()
+
     def update(dt):
+        if game_data.is_paused(): return
         game_data.update(dt)
         square.update(dt)
         base.apply_force(0., -HEIGHT*2., dt)#gravity
@@ -110,6 +135,13 @@ def main():
     def on_mouse_press(x, y, button, modifiers):
         if base.y == 16.:
             base.set_speed(0., HEIGHT/1.5)
+
+    @window.event
+    def on_key_press(symbol, modifiers):
+        if game_data.is_running():
+            game_data.set_paused()
+        elif game_data.is_paused():
+            game_data.set_running()
     
     pyglet.clock.schedule_interval(update, 1./60.)
     
