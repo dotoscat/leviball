@@ -21,6 +21,12 @@ def main():
     obstacles = [shape.Square(OBSTACLE_SIZE, OBSTACLE_SIZE) for i in range(4)]
     used_obstacles = []
 
+    GAME_OVER = 0
+    RUNNING = 1
+    PAUSED = 2
+
+    status = GAME_OVER
+
     def generate_obstacle():
         if not obstacles: return
         obstacle = obstacles.pop()
