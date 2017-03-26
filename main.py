@@ -64,6 +64,11 @@ def main():
         for obstacle in used_obstacles: obstacle.draw()
         glLoadIdentity()
         label.draw()
+
+    @window.event()
+    def on_mouse_motion(x, y, dx, dy):
+        base.move(dx=dx)
+        square.move(dx=dx)
     
     def update(dt):
         base.update(dt)
