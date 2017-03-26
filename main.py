@@ -53,13 +53,14 @@ def main():
 
     game_data = GameData()
 
-    #game_data.set_running()
+    game_data.set_running()
 
     def update(dt):
         if game_data.is_paused(): return
         if game_data.is_running(): game_data.update(dt)
         meters_label.text = 'Meters {}'.format(game_data.get_meters())
         square.update(dt)
+        base.set_rotation_speed(game_data.get_speed()*-256.)
         base.apply_force(0., -HEIGHT*2., dt)#gravity
         base.update(dt)
         if base.y < 16.:

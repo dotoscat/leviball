@@ -12,6 +12,9 @@ class GameData(object):
             self.speed += 0.01
             self.meters += 1
 
+    def get_speed(self):
+        return self.speed
+
     def get_meters(self):
         return self.meters
 
