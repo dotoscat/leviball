@@ -59,6 +59,7 @@ def main():
         label.draw()
     
     def update(dt):
+        square.apply_force(0., -64., dt)
         square.update(dt)
         for obstacle in used_obstacles: obstacle.update(dt)
         generate_obstacle()

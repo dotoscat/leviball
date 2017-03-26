@@ -30,6 +30,10 @@ class Square(object):
         distance = sqrt((self.x - square.x)**2 + (self.y - square.y)**2)
         return distance < self.radius + square.radius
 
+    def apply_force(self, x, y, dt):
+        self.vel_x += x*dt
+        self.vel_y += y*dt
+
     def move(self, dx=0., dy=0.):
         self.x += dx
         self.y += dy
