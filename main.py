@@ -1,10 +1,10 @@
 #!/usr/bin/env python
+import random
+import pyglet
 from pyglet.gl import *
+import shape
 
 def main():
-    import pyglet
-    import shape
-    import random
     WIDTH = 800
     HEIGHT = 600
     OBSTACLE_SIZE = 4
