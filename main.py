@@ -48,7 +48,7 @@ def main():
     HEIGHT = 600
     OBSTACLE_SIZE = 4
     window = pyglet.window.Window(WIDTH, HEIGHT)
-    label = pyglet.text.Label('Hello world!',
+    paused_label = pyglet.text.Label('PAUSED',
                               font_name='Impact',
                               font_size=24,
                               x=window.width//2, y=window.height//2,
@@ -115,10 +115,11 @@ def main():
         square.draw()
         for obstacle in used_obstacles: obstacle.draw()
         glLoadIdentity()
-        label.draw()
+        if game_data.is_paused(): paused_label.draw()
 
     @window.event
     def on_mouse_motion(x, y, dx, dy):
+        if not game_data.is_running(): return
         base.move(dx=dx)
         square.move(dx=dx)
         if base.x < 0.:
@@ -133,6 +134,7 @@ def main():
 
     @window.event
     def on_mouse_press(x, y, button, modifiers):
+        if not game_data.is_running(): return
         if base.y == 16.:
             base.set_speed(0., HEIGHT/1.5)
 
