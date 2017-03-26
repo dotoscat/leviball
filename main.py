@@ -65,10 +65,14 @@ def main():
         glLoadIdentity()
         label.draw()
 
-    @window.event()
+    @window.event
     def on_mouse_motion(x, y, dx, dy):
         base.move(dx=dx)
         square.move(dx=dx)
+
+    @window.event
+    def on_mouse_press(x, y, button, modifiers):
+        print('Jump!')
     
     def update(dt):
         base.update(dt)
