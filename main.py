@@ -15,10 +15,10 @@ def main():
                               x=window.width//2, y=window.height//2,
                               anchor_x='center', anchor_y='center')
     base = shape.Square(32, 32)
-    base.set_position(200, 0+16)
+    base.set_position(0, 0-0+16-0)
     
     square = shape.Square(32, 32)
-    square.set_position(200, 200)
+    square.set_position(0, HEIGHT/4.0)
     square.set_rotation_speed(77)
 
     obstacles = [shape.Square(OBSTACLE_SIZE, OBSTACLE_SIZE) for i in range(4)]
@@ -85,12 +85,12 @@ def main():
     
     def update(dt):
         square.update(dt)
-        square.apply_sin(HEIGHT/4.0)
         base.apply_force(0., -HEIGHT*2., dt)#gravity
         base.update(dt)
         if base.y < 16.:
-            base.y = 16.
+            base.set_position_y(16.)
             base.set_speed(0., 0.)
+        square.apply_sin(HEIGHT/4.0, base.get_position_y())
         for obstacle in used_obstacles: obstacle.update(dt)
         generate_obstacle()
         recycle_obstacle()

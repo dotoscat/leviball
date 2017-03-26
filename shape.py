@@ -18,6 +18,8 @@ class Square(object):
             ('v2f', (*TOP_LEFT, *TOP_RIGHT, *BOTTOM_RIGHT, *BOTTOM_LEFT)),
             ('c3f', (*RED, *GREEN, *BLUE, *WHITE))
         )
+        self.old_x = 0.
+        self.old_y = 0.
         self.x = 0.
         self.y = 0.
         self.vel_x = 0.
@@ -39,9 +41,26 @@ class Square(object):
         self.x += dx
         self.y += dy
 
+    def get_dx(self):
+        return self.x - self.old_x
+
+    def get_dy(self):
+        return self.y - self.old_y
+
     def set_position(self, x, y):
-        self.x = x
+        self.set_position_x(x)
+        self.set_position_y(y)
+
+    def set_position_y(self, y):
+        self.old_y = self.y
         self.y = y
+
+    def set_position_x(self, x):
+        self.old_x = self.x
+        self.x = x
+
+    def get_position_y(self):
+        return self.y
 
     def rotate(self, ddegrees):
         self.degrees += ddegrees
@@ -57,13 +76,17 @@ class Square(object):
         self.vel_y = vel_y
     
     def update(self, dt):
+        self.old_x = self.x
+        self.old_y = self.y
         self.x += self.vel_x*dt
         self.y += self.vel_y*dt
         self.rotation += self.rotation_speed*dt
         self.time += dt
 
-    def apply_sin(self, amplitude):
-        self.y = sin(self.time)*amplitude
+    def apply_sin(self, amplitude, base_y):
+        self.old_y = self.y
+        y = sin(self.time)*amplitude
+        self.y = base_y + y
 
     def push_shape(self, square, G, dt):
         distance = sqrt((self.x - square.x)**2 + (self.y - square.y)**2)
