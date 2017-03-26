@@ -69,6 +69,15 @@ def main():
     def on_mouse_motion(x, y, dx, dy):
         base.move(dx=dx)
         square.move(dx=dx)
+        if base.x < 0.:
+            base.x = 0.
+        if base.x > WIDTH:
+            base.x = WIDTH
+            
+        if square.x < 0.:
+            square.x = 0.
+        if square.x > WIDTH:
+            square.x = WIDTH
 
     @window.event
     def on_mouse_press(x, y, button, modifiers):
