@@ -1,4 +1,4 @@
-from math import sqrt, fabs
+from math import sqrt, fabs, sin
 from pyglet.gl import *
 import pyglet.graphics
 
@@ -25,6 +25,7 @@ class Square(object):
         self.rotation = 0.
         self.rotation_speed = 0.
         self.radius = HALF_WIDTH
+        self.time = 0.0
 
     def collides_with(self, square):
         distance = sqrt((self.x - square.x)**2 + (self.y - square.y)**2)
@@ -53,12 +54,21 @@ class Square(object):
 
     def set_speed(self, vel_x, vel_y):
         self.vel_x = vel_x
-        self_vel_y = vel_y
+        self.vel_y = vel_y
     
     def update(self, dt):
         self.x += self.vel_x*dt
         self.y += self.vel_y*dt
         self.rotation += self.rotation_speed*dt
+        self.time += dt
+
+    def apply_sin(self, amplitude):
+        self.y = sin(self.time)*amplitude
+
+    def push_shape(self, square, G, dt):
+        distance = sqrt((self.x - square.x)**2 + (self.y - square.y)**2)
+        force = G/distance**2
+        square.apply_force(0., force, dt)
     
     def draw(self):
         glMatrixMode(GL_MODELVIEW)

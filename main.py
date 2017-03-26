@@ -54,9 +54,6 @@ def main():
             if base.collides_with(obstacle):
                 return True
         return False
-
-    def gravity(self):
-        pass
     
     @window.event
     def on_draw():
@@ -83,13 +80,17 @@ def main():
 
     @window.event
     def on_mouse_press(x, y, button, modifiers):
-        print('Jump!')
+        if base.y == 16.:
+            base.set_speed(0., HEIGHT/1.5)
     
     def update(dt):
-        base.update(dt)
-        square.apply_force(0., -64., dt)#gravity
-        square.apply_force(0., 32., dt)
         square.update(dt)
+        square.apply_sin(HEIGHT/4.0)
+        base.apply_force(0., -HEIGHT*2., dt)#gravity
+        base.update(dt)
+        if base.y < 16.:
+            base.y = 16.
+            base.set_speed(0., 0.)
         for obstacle in used_obstacles: obstacle.update(dt)
         generate_obstacle()
         recycle_obstacle()
