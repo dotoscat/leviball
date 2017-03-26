@@ -14,6 +14,9 @@ def main():
                               font_size=24,
                               x=window.width//2, y=window.height//2,
                               anchor_x='center', anchor_y='center')
+    base = shape.Square(32, 32)
+    base.set_position(200, 0+16)
+    
     square = shape.Square(32, 32)
     square.set_position(200, 200)
     square.set_rotation_speed(77)
@@ -49,17 +52,23 @@ def main():
             if square.collides_with(obstacle):
                 return True
         return False
+
+    def gravity(self):
+        pass
     
     @window.event
     def on_draw():
         window.clear()
+        base.draw()
         square.draw()
         for obstacle in used_obstacles: obstacle.draw()
         glLoadIdentity()
         label.draw()
     
     def update(dt):
-        square.apply_force(0., -64., dt)
+        base.update(dt)
+        square.apply_force(0., -64., dt)#gravity
+        square.apply_force(0., 32., dt)
         square.update(dt)
         for obstacle in used_obstacles: obstacle.update(dt)
         generate_obstacle()
