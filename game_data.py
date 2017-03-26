@@ -1,4 +1,4 @@
-class GameData:
+class GameData(object):
     GAME_OVER = 0
     RUNNING = 1
     PAUSED = 2
