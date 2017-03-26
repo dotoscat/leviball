@@ -1,3 +1,4 @@
+from math import sqrt, fabs
 from pyglet.gl import *
 import pyglet.graphics
 
@@ -23,6 +24,11 @@ class Square(object):
         self.vel_y = 0.
         self.rotation = 0.
         self.rotation_speed = 0.
+        self.radius = HALF_WIDTH
+
+    def collides_with(self, square):
+        distance = sqrt((self.x - square.x)**2 + (self.y - square.y)**2)
+        return distance < self.radius + square.radius
 
     def move(self, dx=0., dy=0.):
         self.x += dx

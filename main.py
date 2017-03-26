@@ -37,6 +37,12 @@ def main():
                 obstacles.append(used_obstacles.pop(i))
             else:
                 i += 1
+
+    def check_collision():
+        for obstacle in used_obstacles:
+            if square.collides_with(obstacle):
+                return True
+        return False
     
     @window.event
     def on_draw():
@@ -48,9 +54,11 @@ def main():
     
     def update(dt):
         square.update(dt)
+        for obstacle in used_obstacles: obstacle.update(dt)
         generate_obstacle()
         recycle_obstacle()
-        for obstacle in used_obstacles: obstacle.update(dt)
+        if check_collision():
+            print('Game over!')
 
     pyglet.clock.schedule_interval(update, 1./60.)
     
