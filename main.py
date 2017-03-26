@@ -5,7 +5,21 @@ from pyglet.gl import *
 import pyglet.window.key as key
 import shape
 from game_data import GameData
+
+VERSION="1.0b"
+
+MAIN_SCREEN ="""
+LEVIBALL {}
+
+Oscar Triano 'dotoscat' @cat_dotoscat
+
+Use your mouse to avoid small things. Do click to jump.
+In game press any key to pause the game.
+
+Press any key to start the game.
     
+""".format(VERSION)
+
 def main():
     WIDTH = 800
     HEIGHT = 600
@@ -21,6 +35,12 @@ def main():
                               font_size=24,
                               x=window.width//2, y=window.height-24,
                               anchor_x='center', anchor_y='center')
+    intro_label = pyglet.text.Label(MAIN_SCREEN,
+                              font_name='Impact',
+                              font_size=24,
+                              x=window.width//2, y=window.height//2,
+                              anchor_x='center', anchor_y='center',
+                              multiline=True, width=WIDTH//2)
     base = shape.Square(32, 32)
     base.set_position(0, 0-0+16-0)
     
@@ -33,11 +53,11 @@ def main():
 
     game_data = GameData()
 
-    game_data.set_running()
+    #game_data.set_running()
 
     def update(dt):
         if game_data.is_paused(): return
-        game_data.update(dt)
+        if game_data.is_running(): game_data.update(dt)
         meters_label.text = 'Meters {}'.format(game_data.get_meters())
         square.update(dt)
         base.apply_force(0., -HEIGHT*2., dt)#gravity
@@ -47,8 +67,9 @@ def main():
             base.set_speed(0., 0.)
         square.apply_sin(HEIGHT/8.0, base.get_position_y()+128.0)
         for obstacle in used_obstacles: obstacle.update(dt)
-        generate_obstacle()
-        recycle_obstacle()
+        if game_data.is_running():
+            generate_obstacle()
+            recycle_obstacle()
         if check_collision():
             print('Game over!')
 
@@ -86,10 +107,11 @@ def main():
         glLoadIdentity()
         meters_label.draw()
         if game_data.is_paused(): paused_label.draw()
+        elif game_data.is_over(): intro_label.draw() 
 
     @window.event
     def on_mouse_motion(x, y, dx, dy):
-        if not game_data.is_running(): return
+        if game_data.is_paused(): return
         base.move(dx=dx)
         square.move(dx=dx)
         if base.x < 0.:
@@ -104,13 +126,15 @@ def main():
 
     @window.event
     def on_mouse_press(x, y, button, modifiers):
-        if not game_data.is_running(): return
+        if game_data.is_paused(): return
         if base.y == 16.:
             base.set_speed(0., HEIGHT/1.5)
 
     @window.event
     def on_key_press(symbol, modifiers):
-        if game_data.is_running():
+        if game_data.is_over():
+            game_data.set_running()
+        elif game_data.is_running():
             game_data.set_paused()
         elif game_data.is_paused():
             game_data.set_running()
