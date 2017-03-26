@@ -4,6 +4,23 @@ import pyglet
 from pyglet.gl import *
 import shape
 
+class GameData:
+    GAME_OVER = 0
+    RUNNING = 1
+    PAUSED = 2
+    def __init__(self):
+        self.status = GameData.GAME_OVER
+        self.speed = 1.
+        self.meters = 0
+        self.secs = 0.
+
+    def update(self, dt):
+        self.secs += dt*self.speed
+        if self.secs == 1.0:
+            self.secs = 0.0
+            self.speed += 0.1
+            self.meters = 1.
+
 def main():
     WIDTH = 800
     HEIGHT = 600
@@ -24,11 +41,22 @@ def main():
     obstacles = [shape.Square(OBSTACLE_SIZE, OBSTACLE_SIZE) for i in range(4)]
     used_obstacles = []
 
-    GAME_OVER = 0
-    RUNNING = 1
-    PAUSED = 2
+    game_data = GameData()
 
-    status = GAME_OVER
+    def update(dt):
+        game_data.update(dt)
+        square.update(dt)
+        base.apply_force(0., -HEIGHT*2., dt)#gravity
+        base.update(dt)
+        if base.y < 16.:
+            base.set_position_y(16.)
+            base.set_speed(0., 0.)
+        square.apply_sin(HEIGHT/8.0, base.get_position_y()+128.0)
+        for obstacle in used_obstacles: obstacle.update(dt)
+        generate_obstacle()
+        recycle_obstacle()
+        if check_collision():
+            print('Game over!')
 
     def generate_obstacle():
         if not obstacles: return
@@ -83,20 +111,6 @@ def main():
         if base.y == 16.:
             base.set_speed(0., HEIGHT/1.5)
     
-    def update(dt):
-        square.update(dt)
-        base.apply_force(0., -HEIGHT*2., dt)#gravity
-        base.update(dt)
-        if base.y < 16.:
-            base.set_position_y(16.)
-            base.set_speed(0., 0.)
-        square.apply_sin(HEIGHT/8.0, base.get_position_y()+128.0)
-        for obstacle in used_obstacles: obstacle.update(dt)
-        generate_obstacle()
-        recycle_obstacle()
-        if check_collision():
-            print('Game over!')
-
     pyglet.clock.schedule_interval(update, 1./60.)
     
     pyglet.app.run()
