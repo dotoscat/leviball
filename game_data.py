@@ -9,8 +9,11 @@ class GameData(object):
         self.secs += dt*self.speed
         if self.secs > 1.0:
             self.secs = 0.0
-            self.speed += 0.1
-            self.meters += 1.
+            self.speed += 0.01
+            self.meters += 1
+
+    def get_meters(self):
+        return self.meters
 
     def is_running(self):
         return self.status == GameData.RUNNING

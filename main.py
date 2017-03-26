@@ -16,6 +16,11 @@ def main():
                               font_size=24,
                               x=window.width//2, y=window.height//2,
                               anchor_x='center', anchor_y='center')
+    meters_label = pyglet.text.Label('',
+                              font_name='Impact',
+                              font_size=24,
+                              x=window.width//2, y=window.height-24,
+                              anchor_x='center', anchor_y='center')
     base = shape.Square(32, 32)
     base.set_position(0, 0-0+16-0)
     
@@ -33,6 +38,7 @@ def main():
     def update(dt):
         if game_data.is_paused(): return
         game_data.update(dt)
+        meters_label.text = 'Meters {}'.format(game_data.get_meters())
         square.update(dt)
         base.apply_force(0., -HEIGHT*2., dt)#gravity
         base.update(dt)
@@ -78,6 +84,7 @@ def main():
         square.draw()
         for obstacle in used_obstacles: obstacle.draw()
         glLoadIdentity()
+        meters_label.draw()
         if game_data.is_paused(): paused_label.draw()
 
     @window.event
