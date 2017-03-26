@@ -56,3 +56,6 @@ class Square(object):
         glTranslatef(self.x, self.y, 0.)
         glRotatef(self.rotation, 0., 0., 1.)
         self.vertex_list.draw(GL_QUADS)
+
+    def is_out(self, bound=0.):
+        return self.x <= bound

@@ -28,7 +28,16 @@ def main():
         obstacle.set_speed(-random.randint(32, 64), 0.)
         obstacle.set_rotation_speed(random.randint(8, 128))
         used_obstacles.append(obstacle)
-        
+
+    def recycle_obstacle():
+        if not used_obstacles: return
+        i = 0
+        while i < len(used_obstacles):
+            if used_obstacles[i].is_out():
+                obstacles.append(used_obstacles.pop(i))
+            else:
+                i += 1
+    
     @window.event
     def on_draw():
         window.clear()
@@ -40,6 +49,7 @@ def main():
     def update(dt):
         square.update(dt)
         generate_obstacle()
+        recycle_obstacle()
         for obstacle in used_obstacles: obstacle.update(dt)
 
     pyglet.clock.schedule_interval(update, 1./60.)
