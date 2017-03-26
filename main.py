@@ -51,6 +51,8 @@ def main():
         for obstacle in used_obstacles:
             if square.collides_with(obstacle):
                 return True
+            if base.collides_with(obstacle):
+                return True
         return False
 
     def gravity(self):
