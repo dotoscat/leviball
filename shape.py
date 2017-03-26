@@ -35,8 +35,11 @@ class Square(object):
     def rotate(self, ddegrees):
         self.degrees += ddegrees
 
-    def set_rotation(self, degrees):
-        self.degrees = degrees
+    def set_rotation(self, rotation):
+        self.rotation = rotation
+
+    def set_rotation_speed(self, speed):
+        self.rotation_speed = speed
 
     def set_speed(self, vel_x, vel_y):
         self.vel_x = vel_x
@@ -45,10 +48,11 @@ class Square(object):
     def update(self, dt):
         self.x += self.vel_x*dt
         self.y += self.vel_y*dt
+        self.rotation += self.rotation_speed*dt
     
     def draw(self):
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
         glTranslatef(self.x, self.y, 0.)
-        glRotatef(self.degrees, 0., 0., 1.)
+        glRotatef(self.rotation, 0., 0., 1.)
         self.vertex_list.draw(GL_QUADS)

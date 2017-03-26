@@ -12,6 +12,8 @@ def main():
                               anchor_x='center', anchor_y='center')
     square = shape.Square(32, 32)
     square.set_position(200, 200)
+    square.set_rotation_speed(77)
+    
     @window.event
     def on_draw():
         window.clear()
@@ -20,7 +22,7 @@ def main():
         label.draw()
     
     def update(dt):
-        square.rotate(dt*77.)
+        square.update(dt)
 
     pyglet.clock.schedule_interval(update, 1./60.)
     
