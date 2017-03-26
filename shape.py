@@ -21,7 +21,8 @@ class Square(object):
         self.y = 0.
         self.vel_x = 0.
         self.vel_y = 0.
-        self.degrees = 0.
+        self.rotation = 0.
+        self.rotation_speed = 0.
 
     def move(self, dx=0., dy=0.):
         self.x += dx
@@ -37,10 +38,10 @@ class Square(object):
     def set_rotation(self, degrees):
         self.degrees = degrees
 
-    def set_speed(vel_x, vel_y):
+    def set_speed(self, vel_x, vel_y):
         self.vel_x = vel_x
         self_vel_y = vel_y
-
+    
     def update(self, dt):
         self.x += self.vel_x*dt
         self.y += self.vel_y*dt
