@@ -90,7 +90,7 @@ def main():
         if base.y < 16.:
             base.set_position_y(16.)
             base.set_speed(0., 0.)
-        square.apply_sin(HEIGHT/4.0, base.get_position_y())
+        square.apply_sin(HEIGHT/8.0, base.get_position_y()+128.0)
         for obstacle in used_obstacles: obstacle.update(dt)
         generate_obstacle()
         recycle_obstacle()
