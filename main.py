@@ -67,10 +67,12 @@ def main():
             base.set_position_y(16.)
             base.set_speed(0., 0.)
         square.apply_sin(HEIGHT/8.0, base.get_position_y()+128.0)
-        for obstacle in used_obstacles: obstacle.update(dt)
         if game_data.is_running():
             generate_obstacle()
             recycle_obstacle()
+        for obstacle in used_obstacles:
+            obstacle.set_speed(game_data.get_speed()*-32., 0.)
+            obstacle.update(dt)
         if check_collision():
             print('Game over!')
 
@@ -78,7 +80,6 @@ def main():
         if not obstacles: return
         obstacle = obstacles.pop()
         obstacle.set_position(WIDTH+OBSTACLE_SIZE, random.randint(0, HEIGHT//2))
-        obstacle.set_speed(-random.randint(32, 64), 0.)
         obstacle.set_rotation_speed(random.randint(8, 128))
         used_obstacles.append(obstacle)
 
