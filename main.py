@@ -48,7 +48,9 @@ def main():
     square.set_position(0, HEIGHT/4.0)
     square.set_rotation_speed(77)
 
-    obstacles = [shape.Square(OBSTACLE_SIZE, OBSTACLE_SIZE) for i in range(4)]
+    OBSTACLES = 8
+
+    obstacles = [shape.Square(OBSTACLE_SIZE, OBSTACLE_SIZE) for i in range(OBSTACLES)]
     used_obstacles = []
 
     game_data = GameData()
