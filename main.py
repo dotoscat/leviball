@@ -5,6 +5,7 @@ from pyglet.gl import *
 from pyglet.window import key
 import shape
 from game_data import GameData
+from player import Player
 
 VERSION="1.0b"
 
@@ -41,12 +42,8 @@ def main():
                               x=window.width//2, y=window.height//2,
                               anchor_x='center', anchor_y='center',
                               multiline=True, width=WIDTH//2)
-    base = shape.Square(32, 32)
-    base.set_position(0, 0-0+16-0)
-    
-    square = shape.Square(32, 32)
-    square.set_position(0, HEIGHT/4.0)
-    square.set_rotation_speed(77)
+
+    player = Player(HEIGHT/4.0, HEIGHT/8.0)
 
     OBSTACLES = 8
 
@@ -61,14 +58,7 @@ def main():
         if game_data.is_paused(): return
         if game_data.is_running(): game_data.update(dt)
         meters_label.text = 'Meters {}'.format(game_data.get_meters())
-        square.update(dt)
-        base.set_rotation_speed(game_data.get_speed()*-256.)
-        base.apply_force(0., -HEIGHT*2., dt)#gravity
-        base.update(dt)
-        if base.y < 16.:
-            base.set_position_y(16.)
-            base.set_speed_y(0.)
-        square.apply_sin(HEIGHT/8.0, base.get_position_y()+128.0)
+        player.update(dt, -HEIGHT*2., HEIGHT/8.0)
         if game_data.is_running():
             if game_data.new_advance() and random.randint(0, 1):
                 generate_obstacle()
@@ -76,9 +66,9 @@ def main():
         for obstacle in used_obstacles:
             obstacle.set_speed_x(game_data.get_speed()*-32.)
             obstacle.update(dt)
-        if check_collision():
+        if player.check_collision(used_obstacles):
             print('Game over!')
-        fix_player_position()
+        player.fix_position(WIDTH)
 
     def generate_obstacle():
         if not obstacles: return
@@ -106,38 +96,10 @@ def main():
             else:
                 i += 1
 
-    def check_collision():
-        for obstacle in used_obstacles:
-            if square.collides_with(obstacle):
-                return True
-            if base.collides_with(obstacle):
-                return True
-        return False
-
-    def fix_player_position():
-        if base.x < 0.:
-            base.x = 0.
-        if base.x > WIDTH:
-            base.x = WIDTH
-            
-        if square.x < 0.:
-            square.x = 0.
-        if square.x > WIDTH:
-            square.x = WIDTH
-
-    def move_player(vel_x):
-        base.set_speed_x(vel_x)
-        square.set_speed_x(vel_x)
-
-    def jump_player():
-        if base.y == 16.:
-            base.set_speed_y(HEIGHT/1.5)
-
     @window.event
     def on_draw():
         window.clear()
-        base.draw()
-        square.draw()
+        player.draw()
         for obstacle in used_obstacles: obstacle.draw()
         glLoadIdentity()
         meters_label.draw()
@@ -152,17 +114,22 @@ def main():
         pause = symbol == key.P
         if game_data.is_running():
             if jump:
-                jump_player()
+                player.jump(HEIGHT/1.5)
             if move_left:
-                move_player(-WIDTH/2.)
+                player.move(-WIDTH/2.)
             elif move_right:
-                move_player(WIDTH/2.)
+                player.move(WIDTH/2.)
         if pause and game_data.is_running():
             game_data.set_paused()
         elif pause and game_data.is_paused():
             game_data.set_running()
         #if game_data.is_over():
         #    game_data.set_running()
+
+    @window.event
+    def on_key_release(symbol, modifiers):
+        if not game.is_running(): return
+            
 
     pyglet.clock.schedule_interval(update, 1./60.)
     
