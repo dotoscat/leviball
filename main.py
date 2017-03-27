@@ -2,7 +2,7 @@
 import random
 import pyglet
 from pyglet.gl import *
-import pyglet.window.key as key
+from pyglet.window import key
 import shape
 from game_data import GameData
 
@@ -112,21 +112,8 @@ def main():
             if base.collides_with(obstacle):
                 return True
         return False
-    
-    @window.event
-    def on_draw():
-        window.clear()
-        base.draw()
-        square.draw()
-        for obstacle in used_obstacles: obstacle.draw()
-        glLoadIdentity()
-        meters_label.draw()
-        if game_data.is_paused(): paused_label.draw()
-        elif game_data.is_over(): intro_label.draw() 
 
-    @window.event
-    def on_mouse_motion(x, y, dx, dy):
-        if game_data.is_paused(): return
+    def fix_player_position(dx, dy):
         base.move(dx=dx)
         square.move(dx=dx)
         if base.x < 0.:
@@ -140,6 +127,17 @@ def main():
             square.x = WIDTH
 
     @window.event
+    def on_draw():
+        window.clear()
+        base.draw()
+        square.draw()
+        for obstacle in used_obstacles: obstacle.draw()
+        glLoadIdentity()
+        meters_label.draw()
+        if game_data.is_paused(): paused_label.draw()
+        elif game_data.is_over(): intro_label.draw() 
+
+    @window.event
     def on_mouse_press(x, y, button, modifiers):
         if game_data.is_paused(): return
         if base.y == 16.:
@@ -147,13 +145,23 @@ def main():
 
     @window.event
     def on_key_press(symbol, modifiers):
-        if game_data.is_over():
-            game_data.set_running()
-        elif game_data.is_running():
+        jump = symbol == key.UP
+        move_left = symbol == key.LEFT
+        move_right = symbol == key.RIGHT
+        pause = symbol == key.P
+        if jump:
+            print('Jump')
+        if move_left:
+            print('move_left')
+        elif move_right:
+            print('move_right')
+        if pause and game_data.is_running():
             game_data.set_paused()
-        elif game_data.is_paused():
+        elif pause and game_data.is_paused():
             game_data.set_running()
-    
+        #if game_data.is_over():
+        #    game_data.set_running()
+
     pyglet.clock.schedule_interval(update, 1./60.)
     
     pyglet.app.run()
