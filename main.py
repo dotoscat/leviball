@@ -67,17 +67,18 @@ def main():
         base.update(dt)
         if base.y < 16.:
             base.set_position_y(16.)
-            base.set_speed(0., 0.)
+            base.set_speed_y(0.)
         square.apply_sin(HEIGHT/8.0, base.get_position_y()+128.0)
         if game_data.is_running():
             if game_data.new_advance() and random.randint(0, 1):
                 generate_obstacle()
             recycle_obstacle()
         for obstacle in used_obstacles:
-            obstacle.set_speed(game_data.get_speed()*-32., 0.)
+            obstacle.set_speed_x(game_data.get_speed()*-32.)
             obstacle.update(dt)
         if check_collision():
             print('Game over!')
+        fix_player_position()
 
     def generate_obstacle():
         if not obstacles: return
@@ -113,9 +114,7 @@ def main():
                 return True
         return False
 
-    def fix_player_position(dx, dy):
-        base.move(dx=dx)
-        square.move(dx=dx)
+    def fix_player_position():
         if base.x < 0.:
             base.x = 0.
         if base.x > WIDTH:
@@ -125,6 +124,14 @@ def main():
             square.x = 0.
         if square.x > WIDTH:
             square.x = WIDTH
+
+    def move_player(vel_x):
+        base.set_speed_x(vel_x)
+        square.set_speed_x(vel_x)
+
+    def jump_player():
+        if base.y == 16.:
+            base.set_speed_y(HEIGHT/1.5)
 
     @window.event
     def on_draw():
@@ -138,23 +145,18 @@ def main():
         elif game_data.is_over(): intro_label.draw() 
 
     @window.event
-    def on_mouse_press(x, y, button, modifiers):
-        if game_data.is_paused(): return
-        if base.y == 16.:
-            base.set_speed(0., HEIGHT/1.5)
-
-    @window.event
     def on_key_press(symbol, modifiers):
         jump = symbol == key.UP
         move_left = symbol == key.LEFT
         move_right = symbol == key.RIGHT
         pause = symbol == key.P
-        if jump:
-            print('Jump')
-        if move_left:
-            print('move_left')
-        elif move_right:
-            print('move_right')
+        if game_data.is_running():
+            if jump:
+                jump_player()
+            if move_left:
+                move_player(-WIDTH/2.)
+            elif move_right:
+                move_player(WIDTH/2.)
         if pause and game_data.is_running():
             game_data.set_paused()
         elif pause and game_data.is_paused():
