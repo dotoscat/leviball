@@ -59,3 +59,8 @@ class Player(object):
         self.base.draw()
         self.ball.draw()
         
+    def is_moving_left(self):
+        return self.base.get_speed_x() < 0.0
+
+    def is_moving_right(self):
+        return self.base.get_speed_x() > 0.0

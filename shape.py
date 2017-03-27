@@ -71,6 +71,9 @@ class Square(object):
     def set_rotation_speed(self, speed):
         self.rotation_speed = speed
 
+    def get_speed_x(self):
+        return self.vel_x
+
     def set_speed_x(self, vel_x):
         self.vel_x = vel_x
 

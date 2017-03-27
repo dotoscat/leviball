@@ -128,7 +128,13 @@ def main():
 
     @window.event
     def on_key_release(symbol, modifiers):
-        if not game.is_running(): return
+        if not game_data.is_running(): return
+        left = symbol == key.LEFT
+        right = symbol == key.RIGHT
+        if left and player.is_moving_left():
+            player.move(0.)
+        if right and player.is_moving_right():
+            player.move(0.)
             
 
     pyglet.clock.schedule_interval(update, 1./60.)
