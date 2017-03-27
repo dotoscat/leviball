@@ -7,16 +7,21 @@ class GameData(object):
 
     def update(self, dt):
         self.secs += dt*self.speed
+        self.meters_increased = False
         if self.secs > 1.0:
             self.secs = 0.0
             self.speed += 0.01
             self.meters += 1
+            self.meters_increased = True
 
     def get_speed(self):
         return self.speed
 
     def get_meters(self):
         return self.meters
+
+    def new_advance(self):
+        return self.meters_increased
 
     def is_running(self):
         return self.status == GameData.RUNNING
@@ -37,6 +42,7 @@ class GameData(object):
         self.status = GameData.GAME_OVER
 
     def reset(self):
+        self.meters_increased = False
         self.speed = 1.
         self.meters = 0
         self.secs = 0.

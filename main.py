@@ -68,7 +68,8 @@ def main():
             base.set_speed(0., 0.)
         square.apply_sin(HEIGHT/8.0, base.get_position_y()+128.0)
         if game_data.is_running():
-            generate_obstacle()
+            if game_data.new_advance() and random.randint(0, 1):
+                generate_obstacle()
             recycle_obstacle()
         for obstacle in used_obstacles:
             obstacle.set_speed(game_data.get_speed()*-32., 0.)
@@ -79,7 +80,17 @@ def main():
     def generate_obstacle():
         if not obstacles: return
         obstacle = obstacles.pop()
-        obstacle.set_position(WIDTH+OBSTACLE_SIZE, random.randint(0, HEIGHT//2))
+        y = random.randint(0, 128+64)
+        generate_obstacle_for_base = True
+        for used_obstacle in used_obstacles:
+            if used_obstacle.get_position_y() < 64.0:
+                generate_obstacle_for_base = False
+                break
+        if generate_obstacle_for_base:
+            y = random.randint(0, 64)
+        else:
+            y = random.randint(0, 128+64)
+        obstacle.set_position(WIDTH+OBSTACLE_SIZE, y)
         obstacle.set_rotation_speed(random.randint(8, 128))
         used_obstacles.append(obstacle)
 
