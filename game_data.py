@@ -2,7 +2,8 @@ class GameData(object):
     GAME_OVER = 0
     RUNNING = 1
     PAUSED = 2
-    def __init__(self):
+    def __init__(self, max_speed):
+        self.MAX_SPEED = max_speed
         self.reset()
 
     def update(self, dt):
@@ -11,8 +12,10 @@ class GameData(object):
         if self.secs > 1.0:
             self.secs = 0.0
             self.speed += 0.01
+            if self.speed > self.MAX_SPEED:
+                self.speed = self.MAX_SPEED
             self.meters += 1
-            if self.meters > self.last_meters + 2:
+            if self.meters > self.last_meters + 2 + self.speed:
                 self.last_meters = self.meters
                 self.space = True
 

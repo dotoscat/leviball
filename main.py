@@ -53,7 +53,7 @@ def main():
     obstacles = [shape.Square(OBSTACLE_SIZE, OBSTACLE_SIZE) for i in range(OBSTACLES)]
     used_obstacles = []
 
-    game_data = GameData()
+    game_data = GameData(WIDTH)
 
     game_data.set_running()
 
