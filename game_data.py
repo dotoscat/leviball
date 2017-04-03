@@ -15,7 +15,7 @@ class GameData(object):
             if self.speed > self.MAX_SPEED:
                 self.speed = self.MAX_SPEED
             self.meters += 1
-            if self.meters > self.last_meters + 2 + self.speed:
+            if self.meters > self.last_meters + 1 + self.speed:
                 self.last_meters = self.meters
                 self.space = True
 

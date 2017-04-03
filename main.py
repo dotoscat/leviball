@@ -64,7 +64,7 @@ def main():
                 generate_obstacle()
             recycle_obstacle()
         for obstacle in used_obstacles:
-            obstacle.set_speed_x(game_data.get_speed()*-32.)
+            obstacle.set_speed_x(game_data.get_speed()*-64.)
             obstacle.update(dt)
         if player.check_collision(used_obstacles):
             print('Game over!')
