@@ -112,13 +112,12 @@ def main():
         move_left = symbol == key.LEFT
         move_right = symbol == key.RIGHT
         pause = symbol == key.P
-        if game_data.is_running():
-            if jump:
-                player.jump(HEIGHT/1.5)
-            if move_left:
-                player.move(-WIDTH/2.)
-            elif move_right:
-                player.move(WIDTH/2.)
+        if jump:
+            player.jump(HEIGHT/1.5)
+        if move_left:
+            player.move(-WIDTH/2.)
+        elif move_right:
+            player.move(WIDTH/2.)
         if pause and game_data.is_running():
             game_data.set_paused()
         elif pause and game_data.is_paused():
@@ -128,7 +127,6 @@ def main():
 
     @window.event
     def on_key_release(symbol, modifiers):
-        if not game_data.is_running(): return
         left = symbol == key.LEFT
         right = symbol == key.RIGHT
         if left and player.is_moving_left():
