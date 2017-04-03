@@ -14,8 +14,7 @@ LEVIBALL {}
 
 Oscar Triano 'dotoscat' @cat_dotoscat
 
-Use your mouse to avoid small things. Do click to jump.
-In game press any key to pause the game.
+Arrow keys to move. Space to pause the game. 
 
 Press any key to start the game.
     
