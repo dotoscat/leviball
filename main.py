@@ -111,7 +111,7 @@ def main():
         jump = symbol == key.UP
         move_left = symbol == key.LEFT
         move_right = symbol == key.RIGHT
-        pause = symbol == key.P
+        pause = symbol == key.SPACE
         if jump:
             player.jump(HEIGHT/1.5)
         if move_left:
