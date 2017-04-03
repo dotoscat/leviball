@@ -47,6 +47,10 @@ class Player(object):
         if ball.x > width:
             ball.x = width
 
+    def set_position_x(self, pos_x):
+        self.base.set_position_x(pos_x)
+        self.ball.set_position_x(pos_x)
+
     def move(self, vel_x):
         self.base.set_speed_x(vel_x)
         self.ball.set_speed_x(vel_x)

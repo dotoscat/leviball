@@ -17,7 +17,6 @@ Oscar Triano 'dotoscat' @cat_dotoscat
 Arrow keys to move. Space to pause the game. 
 
 Press any key to start the game.
-    
 """.format(VERSION)
 
 def main():
@@ -41,6 +40,12 @@ def main():
                               x=window.width//2, y=window.height//2,
                               anchor_x='center', anchor_y='center',
                               multiline=True, width=WIDTH//2)
+    gameover_label = pyglet.text.Label('GAME OVER\nPress \'space\' to try again',
+                              font_name='Impact',
+                              font_size=24,
+                              x=window.width//2, y=window.height//2,
+                              anchor_x='center', anchor_y='center',
+                              multiline=True, width=WIDTH//2)
 
     player = Player(HEIGHT/4.0, HEIGHT/8.0)
 
@@ -52,6 +57,12 @@ def main():
     game_data = GameData(WIDTH)
 
     game_data.set_running()
+
+    def reset_game():
+        player.set_position_x(WIDTH/2.0)
+        game_data.reset()
+        while len(used_obstacles):
+            obstacles.append(used_obstacles.pop())
 
     def update(dt):
         if game_data.is_paused(): return
@@ -66,7 +77,7 @@ def main():
             obstacle.set_speed_x(game_data.get_speed()*-64.)
             obstacle.update(dt)
         if player.check_collision(used_obstacles):
-            print('Game over!')
+            game_data.set_over()
         player.fix_position(WIDTH)
 
     def generate_obstacle():
@@ -103,26 +114,26 @@ def main():
         glLoadIdentity()
         meters_label.draw()
         if game_data.is_paused(): paused_label.draw()
-        elif game_data.is_over(): intro_label.draw() 
+        elif game_data.is_over(): gameover_label.draw()
 
     @window.event
     def on_key_press(symbol, modifiers):
         jump = symbol == key.UP
         move_left = symbol == key.LEFT
         move_right = symbol == key.RIGHT
-        pause = symbol == key.SPACE
+        space = symbol == key.SPACE
         if jump:
             player.jump(HEIGHT/1.5)
         if move_left:
             player.move(-WIDTH/2.)
         elif move_right:
             player.move(WIDTH/2.)
-        if pause and game_data.is_running():
+        if space and game_data.is_running():
             game_data.set_paused()
-        elif pause and game_data.is_paused():
+        elif space and game_data.is_paused():
             game_data.set_running()
-        #if game_data.is_over():
-        #    game_data.set_running()
+        if space and game_data.is_over():
+            reset_game()
 
     @window.event
     def on_key_release(symbol, modifiers):

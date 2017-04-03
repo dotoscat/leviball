@@ -52,4 +52,4 @@ class GameData(object):
         self.speed = 1.
         self.meters = 0
         self.secs = 0.
-        self.set_over()
+        self.set_running()
