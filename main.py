@@ -132,7 +132,7 @@ def main():
             game_data.set_paused()
         elif space and game_data.is_paused():
             game_data.set_running()
-        if space and game_data.is_over():
+        if space and (game_data.is_over() or game_data.is_main_screen()):
             reset_game()
 
     @window.event
