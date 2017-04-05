@@ -113,7 +113,7 @@ def main():
         player.draw()
         for obstacle in used_obstacles: obstacle.draw()
         glLoadIdentity()
-        meters_label.draw()
+        if not game_data.is_main_screen(): meters_label.draw()
         if game_data.is_paused(): paused_label.draw()
         elif game_data.is_over(): gameover_label.draw()
         elif game_data.is_main_screen(): intro_label.draw()
