@@ -59,25 +59,27 @@ def main():
 
     def reset_game():
         player.set_position_x(WIDTH/2.0)
+        player.move(0.)
         game_data.reset()
         while len(used_obstacles):
             obstacles.append(used_obstacles.pop())
 
     def update(dt):
         if game_data.is_paused(): return
-        if game_data.is_running(): game_data.update(dt)
-        meters_label.text = 'Meters {}'.format(game_data.get_meters())
-        player.update(dt, -HEIGHT*2., HEIGHT/8.0)
+        if not game_data.is_over(): player.update(dt, -HEIGHT*2., HEIGHT/8.0)
         if game_data.is_running():
+            game_data.update(dt)
             if game_data.new_advance() and random.randint(0, 1):
                 generate_obstacle()
             recycle_obstacle()
-        for obstacle in used_obstacles:
-            obstacle.set_speed_x(game_data.get_speed()*-64.)
-            obstacle.update(dt)
+            for obstacle in used_obstacles:
+                obstacle.set_speed_x(game_data.get_speed()*-64.)
+                obstacle.update(dt)
         if player.check_collision(used_obstacles):
             game_data.set_over()
+            player.move(0.)
         player.fix_position(WIDTH)
+        meters_label.text = 'Meters {}'.format(game_data.get_meters())
 
     def generate_obstacle():
         if not obstacles: return
@@ -122,11 +124,11 @@ def main():
         move_left = symbol == key.LEFT
         move_right = symbol == key.RIGHT
         space = symbol == key.SPACE
-        if jump and not game_data.is_paused():
+        if jump and not game_data.is_paused() and not game_data.is_over():
             player.jump(HEIGHT/1.5)
-        if move_left:
+        if move_left and not game_data.is_over():
             player.move(-WIDTH/2.)
-        elif move_right:
+        elif move_right and not game_data.is_over():
             player.move(WIDTH/2.)
         if space and game_data.is_running():
             game_data.set_paused()
