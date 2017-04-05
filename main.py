@@ -24,7 +24,7 @@ import shape
 from game_data import GameData
 from player import Player
 
-VERSION="0.9b"
+VERSION="0.10b"
 
 MAIN_SCREEN ="""
 LEVIBALL {}
@@ -153,6 +153,9 @@ def main():
             game_data.set_running()
         if space and (game_data.is_over() or game_data.is_main_screen()):
             reset_game()
+        if symbol == key.F1:
+            pyglet.image.get_buffer_manager().\
+            get_color_buffer().save('screenshot.png')
 
     @window.event
     def on_key_release(symbol, modifiers):
