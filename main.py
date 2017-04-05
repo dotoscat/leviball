@@ -48,6 +48,7 @@ def main():
                               multiline=True, width=WIDTH//2)
 
     player = Player(HEIGHT/4.0, HEIGHT/8.0)
+    player.set_position_x(WIDTH/2.0)
 
     OBSTACLES = 8
 
@@ -55,8 +56,6 @@ def main():
     used_obstacles = []
 
     game_data = GameData(WIDTH)
-
-    game_data.set_running()
 
     def reset_game():
         player.set_position_x(WIDTH/2.0)
@@ -115,6 +114,7 @@ def main():
         meters_label.draw()
         if game_data.is_paused(): paused_label.draw()
         elif game_data.is_over(): gameover_label.draw()
+        elif game_data.is_main_screen(): intro_label.draw()
 
     @window.event
     def on_key_press(symbol, modifiers):

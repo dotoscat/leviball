@@ -2,9 +2,11 @@ class GameData(object):
     GAME_OVER = 0
     RUNNING = 1
     PAUSED = 2
+    MAIN_SCREEN = 3
     def __init__(self, max_speed):
         self.MAX_SPEED = max_speed
         self.reset()
+        self.set_main()
 
     def update(self, dt):
         self.secs += dt*self.speed
@@ -37,6 +39,9 @@ class GameData(object):
     def is_over(self):
         return self.status == GameData.GAME_OVER
 
+    def is_main_screen(self):
+        return self.status == GameData.MAIN_SCREEN
+
     def set_running(self):
         self.status = GameData.RUNNING
 
@@ -45,6 +50,9 @@ class GameData(object):
 
     def set_over(self):
         self.status = GameData.GAME_OVER
+
+    def set_main(self):
+        self.status = GameData.MAIN_SCREEN
 
     def reset(self):
         self.new_space = False
