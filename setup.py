@@ -9,7 +9,7 @@ from main import VERSION
 base = 'Win32GUI' if sys.platform=='win32' else None
 
 executables = [
-    Executable('main.py', base=base, targetName = 'leviball')
+    Executable('main.py', base=base, targetName = 'leviball.exe')
 ]
 
 setup(name='Leviball',
