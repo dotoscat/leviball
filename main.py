@@ -7,7 +7,7 @@ import shape
 from game_data import GameData
 from player import Player
 
-VERSION="1.0b"
+VERSION="0.9b"
 
 MAIN_SCREEN ="""
 LEVIBALL {}
@@ -16,7 +16,7 @@ Oscar Triano 'dotoscat' @cat_dotoscat
 
 Arrow keys to move. Space to pause the game. 
 
-Press any key to start the game.
+Press space to start the game.
 """.format(VERSION)
 
 def main():
