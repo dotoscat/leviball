@@ -122,7 +122,7 @@ def main():
         move_left = symbol == key.LEFT
         move_right = symbol == key.RIGHT
         space = symbol == key.SPACE
-        if jump:
+        if jump and game_data.is_running():
             player.jump(HEIGHT/1.5)
         if move_left:
             player.move(-WIDTH/2.)
